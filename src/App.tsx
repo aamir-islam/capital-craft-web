@@ -8,6 +8,7 @@ import { WatchListPage } from "./component/WatchListPage/WatchListPage";
 import { OrderSettingPage } from "./component/OrderSettingPage/OrderSettingPage";
 import { useState } from "react";
 import { Header } from "./component/Header/Header";
+import { LogInPage } from "./component/LogInPage/LogInPage";
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -15,6 +16,7 @@ const App = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
   return (
     <BrowserRouter>
       <Header />
@@ -25,7 +27,8 @@ const App = () => {
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
           <main style={{ flexGrow: 1, padding: "16px", overflowY: "auto" }}>
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<LogInPage />} />
+              <Route path="/home" element={<HomePage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/position" element={<PositionPage />} />
               <Route path="/watchlist" element={<WatchListPage />} />

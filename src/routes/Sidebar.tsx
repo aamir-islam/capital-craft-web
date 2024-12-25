@@ -17,8 +17,10 @@ import {
   Reorder,
   SettingsSuggest,
   Menu,
+  Logout,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios, { AxiosResponse } from "axios";
 
 const drawerWidth = 240;
 
@@ -27,7 +29,50 @@ interface SidebarProps {
   toggleSidebar: () => void;
 }
 
+interface LogoutResponse {
+  status: string;
+  data: boolean;
+}
+
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+  const navigateTo = useNavigate();
+  const accessToken =
+    "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJBRzE2NjciLCJqdGkiOiI2NzZjMzY2Yjc0Mzk4ZDE2MTdmYmVmODkiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzM1MTQ1MDY3LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzUxNjQwMDB9.c2epjiTYHd1gq53z88OwpldcWTHJ5kKGbddiuwzUgmY";
+
+  const handleLogout = async (): Promise<void> => {
+    const config = {
+      method: "delete" as "delete",
+      url: "https://api.upstox.com/v2/logout",
+      headers: {
+        Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+        Accept: "application/json", // Expect JSON response
+      },
+    };
+    try {
+      // Make the API call
+      const response: AxiosResponse<LogoutResponse> = await axios(config);
+
+      // Handle the response
+      if (response.data.status === "success" && response.data.data === true) {
+        console.log("Logout successful");
+        navigateTo("/");
+      } else {
+        console.log("Logout failed");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle Axios error
+        console.error(
+          "Axios error during logout:",
+          error.response?.data || error.message
+        );
+      } else {
+        // Handle non-Axios error
+        console.error("Error during logout:", error);
+      }
+    }
+  };
+
   return (
     <Drawer
       variant="persistent"
@@ -74,6 +119,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             <ListItemText primary={item.text} />
           </ListItem>
         ))}
+        <ListItem component={Link} to={"/"} onClick={handleLogout}>
+          <ListItemIcon>
+            <Logout />
+          </ListItemIcon>
+          <ListItemText primary="Sign Out" />
+        </ListItem>
       </List>
     </Drawer>
   );
