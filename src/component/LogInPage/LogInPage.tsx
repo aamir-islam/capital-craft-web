@@ -1,12 +1,15 @@
 import { Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { setToken } from "../../store/tokenSlice";
 
 interface TokenResponse {
   access_token: string;
 }
 
 export const LogInPage: React.FC = () => {
+  const dispatch = useDispatch();
   const navigateTo = useNavigate();
   const location = useLocation();
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -48,7 +51,9 @@ export const LogInPage: React.FC = () => {
       }
 
       const data: TokenResponse = await response.json();
+
       setAccessToken(data.access_token);
+      dispatch(setToken(data.access_token));
     } catch (error) {
       console.error("Error fetching token:", error);
     }
