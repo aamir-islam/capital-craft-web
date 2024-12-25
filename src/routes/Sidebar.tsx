@@ -21,6 +21,8 @@ import {
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const drawerWidth = 240;
 
@@ -35,13 +37,14 @@ interface LogoutResponse {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+  const accessToken = useSelector(
+    (state: RootState) => state.access_token.token
+  );
   const navigateTo = useNavigate();
-  const accessToken =
-    "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJBRzE2NjciLCJqdGkiOiI2NzZjMzY2Yjc0Mzk4ZDE2MTdmYmVmODkiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzM1MTQ1MDY3LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzUxNjQwMDB9.c2epjiTYHd1gq53z88OwpldcWTHJ5kKGbddiuwzUgmY";
 
   const handleLogout = async (): Promise<void> => {
     const config = {
-      method: "delete" as "delete",
+      method: "delete" as const,
       url: "https://api.upstox.com/v2/logout",
       headers: {
         Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
