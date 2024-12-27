@@ -18,7 +18,7 @@ const fetchToken = async (code:string): Promise<TokenResponse | null> => {
       }
     );
 
-    console.log("Access Token Response:", response.data);
+   
     return response.data;
   } catch (error) {
     console.error("Error fetching token:", error);
