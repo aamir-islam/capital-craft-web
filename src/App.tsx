@@ -6,37 +6,37 @@ import { ProfilePage } from "./component/ProfilePage/ProfilePage";
 import { PositionPage } from "./component/PositionPage/PositionPage";
 import { WatchListPage } from "./component/WatchListPage/WatchListPage";
 import { OrderSettingPage } from "./component/OrderSettingPage/OrderSettingPage";
-import { useState } from "react";
 import { Header } from "./component/Header/Header";
 import { LogInPage } from "./component/LogInPage/LogInPage";
+import { useDispatch, useSelector } from "react-redux";
+
+import { toggleSidebarStatue } from "./store/sidebarStateSlice";
+import { RootState } from "../src/store/store";
 
 const App = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const dipatch = useDispatch();
+  const isSidebarActive = useSelector(
+    (state: RootState) => state.sidebarState.status
+  );
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    dipatch(toggleSidebarStatue(!isSidebarActive));
   };
 
   return (
     <BrowserRouter>
       <Header />
-      <div
-        style={{ display: "flex", flexDirection: "column", height: "100vh" }}
-      >
-        <div style={{ display: "flex", flexGrow: 1 }}>
-          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-          <main style={{ flexGrow: 1, padding: "16px", overflowY: "auto" }}>
-            <Routes>
-              <Route path="/" element={<LogInPage />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/position" element={<PositionPage />} />
-              <Route path="/watchlist" element={<WatchListPage />} />
-              <Route path="/order-setting" element={<OrderSettingPage />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
+
+      <Sidebar isOpen={isSidebarActive} toggleSidebar={toggleSidebar} />
+
+      <Routes>
+        <Route path="/" element={<LogInPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/position" element={<PositionPage />} />
+        <Route path="/watchlist" element={<WatchListPage />} />
+        <Route path="/order-setting" element={<OrderSettingPage />} />
+      </Routes>
     </BrowserRouter>
   );
 };
