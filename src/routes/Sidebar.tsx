@@ -58,6 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       // Handle the response
       if (response.data.status === "success" && response.data.data === true) {
         console.log("Logout successful");
+        localStorage.removeItem("token");
         navigateTo("/");
       } else {
         console.log("Logout failed");
@@ -81,10 +82,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       variant="persistent"
       open={true}
       sx={{
-        width: isOpen ? drawerWidth : 56,
+        width: isOpen ? drawerWidth : 60,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: isOpen ? drawerWidth : 56,
+          width: isOpen ? drawerWidth : 60,
           boxSizing: "border-box",
           transition: "width 0.3s",
         },

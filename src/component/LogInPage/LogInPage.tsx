@@ -54,6 +54,7 @@ export const LogInPage: React.FC = () => {
 
       setAccessToken(data.access_token);
       dispatch(setToken(data.access_token));
+      localStorage.setItem("token", JSON.stringify(data.access_token));
     } catch (error) {
       console.error("Error fetching token:", error);
     }
